@@ -20,39 +20,31 @@ export function TaskList() {
       return;
     }
 
-    const task = {
+    const newTask = {
       id: Math.floor(Date.now() * Math.random()),
       title: newTaskTitle, 
       isComplete: false,
     }
 
-    const newTasks = [...tasks, task]
-
-    setTasks(newTasks);
+    setTasks(oldState => [...oldState, newTask]);
+    setNewTaskTitle('')
   }
 
 
   function handleToggleTaskCompletion(id: number) {
-    const taskIndex = tasks.findIndex(task => task.id === id);
+    const newTasksUpdated = tasks.map(task => task.id === id ? {
+      ...task,
+      isComplete: !task.isComplete
+    } : task);
     
-    let updateTasks = [...tasks]
-
-    if(taskIndex >= 0) {
-      updateTasks[taskIndex].isComplete = true
-    }
-    
-    setTasks(updateTasks);
+   
+    setTasks(newTasksUpdated);
   }
 
   function handleRemoveTask(id: number) {
-    const taskIndex = tasks.findIndex(task => task.id === id);
-    let deleteTasks = [...tasks]
+    const filteredTasks = tasks.filter(task => task.id !== id);
 
-    if(taskIndex >= 0) {
-      deleteTasks.splice(taskIndex, 1)
-    }
-
-    setTasks(deleteTasks);
+    setTasks(filteredTasks);
   }
 
   return (
